@@ -12,6 +12,7 @@ class Hashtag(models.Model):
         verbose_name = 'Хештег'
         verbose_name_plural = 'Хештеги'
 
+
 class Post(models.Model):
     """ References """
     hashtags = models.ManyToManyField(Hashtag)
