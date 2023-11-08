@@ -2,15 +2,17 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from . import models
 from .forms import CreatePostForm
-from .models import Post
+from blog.models import Post
 
 
 def post_list_view(request):
+    print(request.user)
     if request.method == 'GET':
-        post_value = models.Post.objects.all()
+        post_value = Post
 
         context_data = {
-            'post_key': post_value
+            'post_key': post_value,
+            'user': request.user
         }
 
         return render(request, 'post/post.html', context=context_data)
@@ -39,7 +41,7 @@ def post_create_view(request):
                 number_of_page=cleaned_data.get('number_of_page'),)
             return redirect('/post/')
 
-       return render(request, '/post/create.html', context={'form': form})
+    return render(request, '/post/create.html', context={'form': form})
 
 def hello_view(request):
     if request.method == 'GET':

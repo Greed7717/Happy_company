@@ -9,7 +9,7 @@ class Hashtag(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = 'Хештег'
+        verbose_name = 'Хештег)'
         verbose_name_plural = 'Хештеги'
 
 
