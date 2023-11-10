@@ -3,19 +3,35 @@ from django.http import HttpResponse
 from . import models
 from .forms import CreatePostForm
 from blog.models import Post
+from blog.constants import PAGINTION_LIMIT
 
 
 def post_list_view(request):
     print(request.user)
     if request.method == 'GET':
         post_value = Post
+        search = request.GET.get('search')
+        page = int(request.GET.get('page', 1))
+
+        if search:
+            post_value = post_value.filter(title__contains=search) | post_value.filter(description_contains=search)
+
+        max_page = post_value.__len__() / PAGINTION_LIMIT
+        if round(max_page) == round(max_page) + 1:
+            max_page = round(max_page) + 1
+        else:
+            max_page = round(max_page)
+
+        post_value = post_value[PAGINTION_LIMIT * (page-1):PAGINTION_LIMIT*page]
 
         context_data = {
             'post_key': post_value,
-            'user': request.user
+            'user': request.user,
+            'pages': range(1, max_page+1)
         }
 
         return render(request, 'post/post.html', context=context_data)
+
 
 
 def post_create_view(request):
